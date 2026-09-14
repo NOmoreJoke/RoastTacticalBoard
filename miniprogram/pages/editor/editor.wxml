@@ -1,0 +1,247 @@
+<view class="editor-page">
+  <!-- 顶栏 -->
+  <view class="topbar row space">
+    <view class="title-chip" bindtap="onEditTitle">📜 {{title || '点我起标题'}}</view>
+    <view class="top-actions row">
+      <view class="top-btn" bindtap="onSave">💾 保存</view>
+      <view class="top-btn top-btn-hot" bindtap="onExport">🎨 出图</view>
+    </view>
+  </view>
+
+  <!-- 战术画布区 -->
+  <view class="board-wrap row">
+    <view
+      id="boardArea"
+      class="board-area"
+      style="width:{{canvasW}}px;height:{{canvasH}}px;"
+    >
+      <canvas
+        type="2d"
+        id="courtCanvas"
+        class="court-canvas"
+        style="width:{{canvasW}}px;height:{{canvasH}}px;"
+      ></canvas>
+
+      <!-- 箭头绘制/擦除手势层（选择模式下隐藏，让 token 接管事件） -->
+      <view
+        wx:if="{{toolMode === 'pass' || toolMode === 'run' || toolMode === 'shoot'}}"
+        class="gesture-layer"
+        catchtouchstart="onAreaTouchStart"
+        catchtouchmove="onAreaTouchMove"
+        catchtouchend="onAreaTouchEnd"
+      ></view>
+      <view
+        wx:if="{{toolMode === 'erase'}}"
+        class="gesture-layer"
+        catchtap="onAreaTapForErase"
+      ></view>
+
+      <!-- 球员 token -->
+      <view
+        wx:for="{{players}}"
+        wx:key="id"
+        class="token"
+        style="left:{{item.x}}%;top:{{item.y}}%;background:{{item.avatar.color}};box-shadow:0 4rpx 0 rgba(0,0,0,.4), 0 0 0 4rpx {{item.team === 'home' ? '#ffc93c' : '#2e9bff'}};"
+        data-id="{{item.id}}"
+        catchtouchstart="onPlayerTouchStart"
+        catchtouchmove="onPlayerTouchMove"
+        catchtouchend="onPlayerTouchEnd"
+        catchtap="onPlayerTap"
+      >
+        <view class="token-emoji">{{item.avatar.emoji}}</view>
+        <view class="token-number">{{item.avatar.number}}</view>
+        <view class="token-name">{{item.source === 'stranger' ? '🎭' : ''}}{{item.name}}</view>
+      </view>
+
+      <!-- 吐槽气泡 -->
+      <view
+        wx:for="{{roasts}}"
+        wx:key="id"
+        class="bubble"
+        style="left:{{item.x}}%;top:{{item.y}}%;"
+        data-id="{{item.id}}"
+        catchtouchstart="onRoastTouchStart"
+        catchtouchmove="onRoastTouchMove"
+        catchtouchend="onRoastTouchEnd"
+        catchtap="onRoastTap"
+      >
+        <view class="bubble-text" wx:if="{{item.text}}">{{item.text}}</view>
+        <view class="bubble-text bubble-empty" wx:else>点我写吐槽…</view>
+        <view class="bubble-sub" wx:if="{{item.tagsText || item.atText}}">
+          <text wx:if="{{item.tagsText}}" class="bubble-tags">{{item.tagsText}}</text>
+          <text wx:if="{{item.atText}}" class="bubble-at">{{item.atText}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 工具栏 -->
+  <view class="toolbar card">
+    <view class="tool-row row">
+      <view class="tool {{toolMode === 'select' ? 'tool-on' : ''}}" data-mode="select" bindtap="onPickMode">☝️ 选择</view>
+      <view class="tool {{toolMode === 'pass' ? 'tool-on' : ''}}" data-mode="pass" bindtap="onPickMode">➖ 传球</view>
+      <view class="tool {{toolMode === 'run' ? 'tool-on' : ''}}" data-mode="run" bindtap="onPickMode">💨 跑位</view>
+      <view class="tool {{toolMode === 'shoot' ? 'tool-on' : ''}}" data-mode="shoot" bindtap="onPickMode">💥 出手</view>
+      <view class="tool {{toolMode === 'erase' ? 'tool-on' : ''}}" data-mode="erase" bindtap="onPickMode">🧽 擦除</view>
+    </view>
+    <view class="tool-row row">
+      <view class="tool" bindtap="onUndo">↩️ 撤销</view>
+      <view class="tool" bindtap="onClearArrows">🗑 清箭头</view>
+      <view class="tool tool-add" bindtap="onOpenAddPlayer">➕ 球员</view>
+      <view class="tool tool-add" bindtap="onOpenAddRoast">💬 吐槽</view>
+    </view>
+  </view>
+
+  <!-- 球员编辑面板 -->
+  <view class="sheet-mask" wx:if="{{panel === 'player'}}" bindtap="onClosePanel">
+    <view class="sheet card" catchtap="onNoop">
+      <view class="sheet-title comic-title">球员设置</view>
+      <view class="row" wx:if="{{editingPlayer}}">
+        <view class="mini-avatar" style="background:{{editingPlayer.avatar.color}};">{{editingPlayer.avatar.emoji}}</view>
+        <view class="flex1">
+          <view class="sheet-name">{{editingPlayer.source === 'stranger' ? '🎭路人 · ' : ''}}{{editingPlayer.name}}</view>
+          <view class="row sheet-btns">
+            <view class="mini-btn" bindtap="onRenamePlayer">✏️ 改名</view>
+            <view class="mini-btn" bindtap="onRerollAvatar">🎲 换形象</view>
+            <view class="mini-btn" bindtap="onSwitchTeam">{{editingPlayer.team === 'home' ? '🟡 主队 → 客队' : '🔵 客队 → 主队'}}</view>
+          </view>
+        </view>
+      </view>
+      <view class="sheet-label">贴上称号（最多 3 个）</view>
+      <view class="chips">
+        <view
+          wx:for="{{tags}}"
+          wx:key="id"
+          class="tag-chip {{editingPlayer.tagSet[item.id] ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onTogglePlayerTag"
+        >{{item.emoji}} {{item.name}}</view>
+      </view>
+      <view class="row sheet-foot">
+        <view class="btn-danger flex1" bindtap="onDeletePlayer">🗑 下场（删除）</view>
+        <view class="sheet-gap"></view>
+        <view class="btn-hero flex1" bindtap="onClosePanel">好了</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 吐槽编辑面板 -->
+  <view class="sheet-mask" wx:if="{{panel === 'roast'}}" bindtap="onClosePanel">
+    <view class="sheet card" catchtap="onNoop">
+      <view class="sheet-title comic-title">开吐！</view>
+      <textarea
+        class="roast-input"
+        value="{{editingRoast.text}}"
+        bindinput="onRoastTextInput"
+        maxlength="60"
+        placeholder="最多 60 字，吐槽要凶但要有爱～"
+      ></textarea>
+      <view class="chips">
+        <view
+          wx:for="{{templates}}"
+          wx:key="*this"
+          class="tag-chip"
+          data-text="{{item}}"
+          bindtap="onRoastTemplate"
+        >{{item}}</view>
+      </view>
+      <view class="sheet-label">带个标签</view>
+      <view class="chips">
+        <view
+          wx:for="{{tags}}"
+          wx:key="id"
+          class="tag-chip {{editingRoast.tagSet[item.id] ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onToggleRoastTag"
+        >{{item.emoji}} {{item.name}}</view>
+      </view>
+      <view class="sheet-label">@ 谁（点场上球员）</view>
+      <view class="chips">
+        <view
+          wx:for="{{players}}"
+          wx:key="id"
+          class="tag-chip {{editingRoast.targetSet[item.id] ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onToggleRoastTarget"
+        >{{item.avatar.emoji}} {{item.name}}</view>
+      </view>
+      <view class="row sheet-foot">
+        <view class="btn-danger flex1" bindtap="onDeleteRoast">🗑 删掉这条</view>
+        <view class="sheet-gap"></view>
+        <view class="btn-hero flex1" bindtap="onClosePanel">就这么吐</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加球员面板 -->
+  <view class="sheet-mask" wx:if="{{panel === 'addPlayer'}}" bindtap="onClosePanel">
+    <view class="sheet card" catchtap="onNoop">
+      <view class="sheet-title comic-title">谁上场？</view>
+      <view class="row tabs">
+        <view class="tab {{addPlayerTab === 'roster' ? 'tab-on' : ''}}" data-tab="roster" bindtap="onAddPlayerTab">📋 名单</view>
+        <view class="tab {{addPlayerTab === 'new' ? 'tab-on' : ''}}" data-tab="new" bindtap="onAddPlayerTab">➕ 新队友</view>
+        <view class="tab {{addPlayerTab === 'stranger' ? 'tab-on' : ''}}" data-tab="stranger" bindtap="onAddPlayerTab">🎭 路人</view>
+      </view>
+
+      <block wx:if="{{addPlayerTab === 'roster'}}">
+        <view wx:if="{{!roster.length}}" class="empty-hint">名单还是空的，去「我的形象」里添加队友</view>
+        <view
+          wx:for="{{roster}}"
+          wx:key="id"
+          class="roster-item row"
+          data-id="{{item.id}}"
+          bindtap="onAddRosterPlayer"
+        >
+          <view class="mini-avatar" style="background:{{item.avatar.color}};">{{item.avatar.emoji}}</view>
+          <view class="flex1">{{item.name}}</view>
+          <view class="roster-add">上场 +</view>
+        </view>
+      </block>
+
+      <block wx:if="{{addPlayerTab === 'new'}}">
+        <input
+          class="name-input"
+          value="{{newName}}"
+          bindinput="onNewNameInput"
+          maxlength="8"
+          placeholder="队友名字（最多 8 字）"
+        />
+        <view class="row">
+          <view class="btn-ghost flex1" bindtap="onAddMe">🙌 用我的形象上</view>
+          <view class="sheet-gap"></view>
+          <view class="btn-hero flex1" bindtap="onAddNewPlayer">➕ 添加上场</view>
+        </view>
+      </block>
+
+      <block wx:if="{{addPlayerTab === 'stranger'}}">
+        <view class="empty-hint">不认识？没有关系，随机生成一个神秘路人</view>
+        <view class="btn-hero" bindtap="onAddStranger">🎭 生成路人上场</view>
+      </block>
+
+      <view class="sheet-foot">
+        <view class="btn-ghost" bindtap="onClosePanel">先不加</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导出预览 -->
+  <view class="sheet-mask" wx:if="{{showExport}}" bindtap="onCloseExport">
+    <view class="sheet card" catchtap="onNoop">
+      <view class="sheet-title comic-title">吐槽图出炉！🔥</view>
+      <image class="poster" src="{{posterPath}}" mode="widthFix" show-menu-by-longpress="{{true}}" />
+      <view class="row">
+        <view class="btn-ghost flex1" bindtap="onSavePoster">💾 存相册</view>
+        <view class="sheet-gap"></view>
+        <view class="btn-ghost flex1" bindtap="onCopyShareCode">📋 吐槽码</view>
+        <view class="sheet-gap"></view>
+        <button class="btn-hero flex1 share-btn" open-type="share">🚀 转发</button>
+      </view>
+      <view class="sheet-foot">
+        <view class="btn-ghost" bindtap="onSharePoster">🖼 图片分享（发群/朋友圈）</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 导出用离屏画布 -->
+  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
+</view>

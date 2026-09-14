@@ -1,0 +1,77 @@
+<view class="page">
+  <!-- Banner -->
+  <view class="banner speed-lines">
+    <view class="comic-title banner-title">今晚的锅，谁来背？</view>
+    <view class="banner-sub">赛后 1 分钟，画出队友的迷惑跑位 🏀⚽</view>
+  </view>
+
+  <!-- 选择运动 -->
+  <view class="sports row">
+    <view
+      class="sport-card card speed-lines"
+      wx:for="{{sports}}"
+      wx:key="key"
+      data-sport="{{item.key}}"
+      bindtap="onPickSport"
+    >
+      <view class="sport-emoji">{{item.emoji}}</view>
+      <view class="sport-name comic-title">{{item.name}}</view>
+      <view class="sport-desc">{{item.desc}}</view>
+      <view class="badge-boom">开画!</view>
+    </view>
+  </view>
+
+  <!-- 工具入口 -->
+  <view class="entries row">
+    <view class="entry-btn btn-ghost flex1" bindtap="onOpenImport">📥 输入吐槽码导入</view>
+  </view>
+  <view class="entries row">
+    <view class="entry-btn btn-ghost flex1" bindtap="onGoRanking">🔥 本机吐槽榜</view>
+    <view class="entry-gap"></view>
+    <view class="entry-btn btn-ghost flex1" bindtap="onGoProfile">🎭 我的形象</view>
+  </view>
+
+  <!-- 我的板列表 -->
+  <view class="section-title comic-title" wx:if="{{boards.length}}">我的战术板</view>
+  <view class="board-list">
+    <view class="board-item card" wx:for="{{boards}}" wx:key="id">
+      <view class="board-main" data-id="{{item.id}}" bindtap="onViewBoard">
+        <view class="board-title-row row space">
+          <view class="board-title">{{item.sportEmoji}} {{item.title}}</view>
+          <view class="board-value">🔥 {{item.value}}</view>
+        </view>
+        <view class="board-meta">{{item.roastCount}} 条吐槽 · {{item.timeText}}</view>
+      </view>
+      <view class="board-actions row">
+        <view class="action" data-id="{{item.id}}" catchtap="onOpenBoard">✏️ 编辑</view>
+        <view class="action" data-id="{{item.id}}" catchtap="onCopyBoard">📑 复制</view>
+        <view class="action action-danger" data-id="{{item.id}}" catchtap="onDeleteBoard">🗑 删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!boards.length}}">
+    <view class="empty-emoji">🏸</view>
+    <view class="empty-text">还没有战术板，快选个运动开吐！</view>
+  </view>
+
+  <!-- 吐槽码导入弹层 -->
+  <view class="mask" wx:if="{{showImport}}" bindtap="onCloseImport">
+    <view class="modal card" catchtap="">
+      <view class="modal-title comic-title">粘贴吐槽码</view>
+      <textarea
+        class="import-area"
+        value="{{importCode}}"
+        bindinput="onImportInput"
+        placeholder="粘贴好友发来的 RTB1.xxxx 吐槽码"
+        maxlength="-1"
+      />
+      <view class="import-error" wx:if="{{importError}}">{{importError}}</view>
+      <view class="row">
+        <view class="btn-ghost flex1" bindtap="onCloseImport">取消</view>
+        <view class="entry-gap"></view>
+        <view class="btn-hero flex1" bindtap="onConfirmImport">导入开吐</view>
+      </view>
+    </view>
+  </view>
+</view>

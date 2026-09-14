@@ -1,0 +1,39 @@
+<view class="page">
+  <!-- 头部 -->
+  <view class="head card speed-lines">
+    <view class="head-title comic-title">{{sportEmoji}} {{title}}</view>
+    <view class="head-meta">🔥 吐槽值 <text class="value-num">{{value}}</text> · {{timeText}}</view>
+  </view>
+
+  <!-- 场景回放 -->
+  <view class="board-wrap row">
+    <view id="boardArea" class="board-area" style="width:{{canvasW}}px;height:{{canvasH}}px;">
+      <canvas type="2d" id="sceneCanvas" style="width:{{canvasW}}px;height:{{canvasH}}px;"></canvas>
+    </view>
+  </view>
+
+  <!-- 吐槽列表 -->
+  <view class="section-title comic-title">吐槽区（点「太真实了」加火）</view>
+  <view class="roast-item card" wx:for="{{roasts}}" wx:key="id">
+    <view class="roast-text">“{{item.text}}”</view>
+    <view class="roast-sub" wx:if="{{item.tagsText || item.atText}}">
+      <text wx:if="{{item.tagsText}}" class="roast-tags">{{item.tagsText}}</text>
+      <text wx:if="{{item.atText}}" class="roast-at">{{item.atText}}</text>
+    </view>
+    <view class="roast-like" data-id="{{item.id}}" bindtap="onLikeRoast">😂 太真实了 · {{item.likes}}</view>
+  </view>
+  <view class="empty" wx:if="{{!roasts.length}}">这块板还没吐槽，去编辑器加一条？</view>
+
+  <!-- 分享动作 -->
+  <view class="actions row">
+    <view class="btn-ghost flex1" bindtap="onSavePoster">💾 存吐槽图</view>
+    <view class="gap"></view>
+    <view class="btn-ghost flex1" bindtap="onCopyShareCode">📋 吐槽码</view>
+  </view>
+  <view class="actions row">
+    <button class="btn-hero flex1 share-btn" open-type="share">🚀 转发给球友</button>
+  </view>
+
+  <!-- 离屏导出画布 -->
+  <canvas type="2d" id="exportCanvas" class="export-canvas"></canvas>
+</view>

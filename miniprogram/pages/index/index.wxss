@@ -1,0 +1,132 @@
+.page {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+.banner {
+  border: 3rpx solid #2e2e5e;
+  border-radius: 20rpx;
+  background-color: #1e1e3f;
+  padding: 36rpx 30rpx;
+  margin-bottom: 24rpx;
+}
+.banner-title {
+  font-size: 44rpx;
+  margin-bottom: 10rpx;
+}
+.banner-sub {
+  color: #b8b8d9;
+  font-size: 26rpx;
+}
+
+.sports {
+  align-items: stretch;
+}
+.sport-card {
+  flex: 1;
+  padding: 30rpx 24rpx;
+  text-align: center;
+  position: relative;
+}
+.sport-card:first-child {
+  margin-right: 20rpx;
+}
+.sport-emoji {
+  font-size: 72rpx;
+}
+.sport-name {
+  font-size: 36rpx;
+  margin: 8rpx 0 4rpx;
+}
+.sport-desc {
+  color: #b8b8d9;
+  font-size: 22rpx;
+  margin-bottom: 14rpx;
+}
+
+.entries {
+  margin-top: 24rpx;
+}
+.entry-gap {
+  width: 20rpx;
+}
+
+.section-title {
+  font-size: 34rpx;
+  margin: 36rpx 0 16rpx;
+}
+
+.board-item {
+  margin-bottom: 20rpx;
+  padding: 22rpx 24rpx;
+}
+.board-title {
+  font-size: 30rpx;
+  font-weight: 700;
+}
+.board-value {
+  color: #ffc93c;
+  font-weight: 800;
+}
+.board-meta {
+  color: #8f8fb5;
+  font-size: 24rpx;
+  margin-top: 6rpx;
+}
+.board-actions {
+  margin-top: 16rpx;
+  border-top: 2rpx solid #2e2e5e;
+  padding-top: 14rpx;
+}
+.action {
+  color: #2e9bff;
+  font-size: 26rpx;
+  margin-right: 36rpx;
+}
+.action-danger {
+  color: #ff5a36;
+}
+
+.empty {
+  text-align: center;
+  padding: 80rpx 0 40rpx;
+  color: #8f8fb5;
+}
+.empty-emoji {
+  font-size: 88rpx;
+  margin-bottom: 16rpx;
+}
+
+.mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 26, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+.modal {
+  width: 86%;
+  padding: 32rpx 30rpx;
+  background: #1e1e3f;
+}
+.modal-title {
+  font-size: 34rpx;
+  margin-bottom: 20rpx;
+}
+.import-area {
+  width: 100%;
+  box-sizing: border-box;
+  height: 200rpx;
+  background: #10102a;
+  border: 2rpx solid #2e2e5e;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 24rpx;
+  color: #f5f0e6;
+}
+.import-error {
+  color: #ff5a36;
+  font-size: 24rpx;
+  margin: 12rpx 0;
+}

@@ -1,0 +1,99 @@
+<view class="page">
+  <!-- 页签 -->
+  <view class="tabs row card">
+    <view class="tab {{tab === 'avatar' ? 'tab-on' : ''}}" data-tab="avatar" bindtap="onTab">🙌 我的形象</view>
+    <view class="tab {{tab === 'roster' ? 'tab-on' : ''}}" data-tab="roster" bindtap="onTab">📋 球员名单</view>
+    <view class="tab {{tab === 'tags' ? 'tab-on' : ''}}" data-tab="tags" bindtap="onTab">🏷 称号</view>
+  </view>
+
+  <!-- 我的形象 -->
+  <block wx:if="{{tab === 'avatar'}}">
+    <view class="card sec">
+      <view class="sec-title comic-title">我在球场上的样子</view>
+      <view class="preview row">
+        <view class="big-avatar" style="background:{{selColor}};">
+          <view class="big-emoji">{{selEmoji}}</view>
+          <view class="big-number">{{selNumber}}</view>
+        </view>
+        <input class="nick-input flex1" value="{{nickname}}" bindinput="onNickname" maxlength="12" placeholder="我的绰号（最多 12 字）" />
+      </view>
+
+      <view class="grid-label">颜色</view>
+      <view class="color-grid">
+        <view
+          wx:for="{{colors}}"
+          wx:key="id"
+          class="color-dot {{selColor === item.value ? 'color-on' : ''}}"
+          style="background:{{item.value}};"
+          data-value="{{item.value}}"
+          bindtap="onPickColor"
+        ></view>
+      </view>
+
+      <view class="grid-label">表情</view>
+      <view class="emoji-grid">
+        <view
+          wx:for="{{emojis}}"
+          wx:key="*this"
+          class="emoji-cell {{selEmoji === item ? 'emoji-on' : ''}}"
+          data-value="{{item}}"
+          bindtap="onPickEmoji"
+        >{{item}}</view>
+      </view>
+
+      <view class="grid-label">号码</view>
+      <input class="num-input" type="number" value="{{selNumber}}" bindinput="onNumberInput" maxlength="2" placeholder="0-99" />
+
+      <view class="btn-hero save-btn" bindtap="onSaveProfile">保存我的形象</view>
+    </view>
+  </block>
+
+  <!-- 球员名单 -->
+  <block wx:if="{{tab === 'roster'}}">
+    <view class="card sec">
+      <view class="sec-title comic-title">常一起打的兄弟们</view>
+      <view class="add-row row">
+        <input class="name-input flex1" value="{{newRosterName}}" bindinput="onRosterName" maxlength="8" placeholder="名字（最多 8 字）" />
+        <view class="add-btn btn-hero" bindtap="onAddRoster">➕</view>
+      </view>
+      <view class="roster-item row" wx:for="{{roster}}" wx:key="id">
+        <view class="mini-avatar" style="background:{{item.avatar.color}};">{{item.avatar.emoji}}</view>
+        <view class="flex1">
+          <view>{{item.name}}</view>
+          <view class="roster-num">#{{item.avatar.number}}</view>
+        </view>
+        <view class="remove" data-id="{{item.id}}" bindtap="onRemoveRoster">移除</view>
+      </view>
+      <view class="empty-hint" wx:if="{{!roster.length}}">还没有队员，加上几个，编辑器里一键上场</view>
+    </view>
+  </block>
+
+  <!-- 称号 -->
+  <block wx:if="{{tab === 'tags'}}">
+    <view class="card sec">
+      <view class="sec-title comic-title">我的称号（被 @ 时更响亮）</view>
+      <view class="chips">
+        <view
+          wx:for="{{tags}}"
+          wx:key="id"
+          class="tag-chip {{myTagSet[item.id] ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="onToggleMyTag"
+        >{{item.emoji}} {{item.name}}</view>
+      </view>
+
+      <view class="sec-title comic-title">自定义称号</view>
+      <view class="add-row row">
+        <input class="name-input flex1" value="{{newTagName}}" bindinput="onTagName" maxlength="8" placeholder="恶搞但无攻击性（最多 8 字）" />
+        <view class="add-btn btn-hero" bindtap="onAddCustomTag">➕</view>
+      </view>
+      <view class="err" wx:if="{{tagError}}">{{tagError}}</view>
+      <view class="chips">
+        <view wx:for="{{customTags}}" wx:key="id" class="tag-chip">
+          {{item.emoji}} {{item.name}}
+          <text class="chip-x" data-id="{{item.id}}" catchtap="onRemoveCustomTag"> ✕</text>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

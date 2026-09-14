@@ -1,0 +1,34 @@
+<view class="page">
+  <view class="head card speed-lines">
+    <view class="head-title comic-title">🔥 本机吐槽榜</view>
+    <view class="head-sub">基于本机 {{boardsCount}} 块板的被 @ 点赞聚合 · 云端圈子榜在路上</view>
+  </view>
+
+  <!-- 领奖台 -->
+  <view class="podium row" wx:if="{{list.length >= 3}}">
+    <view class="podium-item" wx:for="{{[list[1], list[0], list[2]]}}" wx:key="rank">
+      <view class="podium-medal">{{item.medal}}</view>
+      <view class="podium-avatar {{item.rank === 1 ? 'podium-first' : ''}}" style="background:{{item.avatar.color}};">
+        {{item.avatar.emoji}}
+      </view>
+      <view class="podium-name">{{item.name}}</view>
+      <view class="podium-value">🔥 {{item.valueText}}</view>
+    </view>
+  </view>
+
+  <!-- 榜单 -->
+  <view class="rank-item card row" wx:for="{{list}}" wx:key="rank" wx:if="{{item.rank > 3}}">
+    <view class="rank-num">{{item.rank}}</view>
+    <view class="rank-avatar" style="background:{{item.avatar.color}};">{{item.avatar.emoji}}</view>
+    <view class="flex1">
+      <view class="rank-name">{{item.name}} <text class="rank-source">{{item.sourceLabel}}</text></view>
+      <view class="rank-tags" wx:if="{{item.tagsText}}">{{item.tagsText}}</view>
+    </view>
+    <view class="rank-value">🔥 {{item.valueText}}</view>
+  </view>
+
+  <view class="empty" wx:if="{{!list.length}}">
+    <view class="empty-emoji">🪑</view>
+    <view>榜单空空如也，先去画板吐槽几个兄弟！</view>
+  </view>
+</view>

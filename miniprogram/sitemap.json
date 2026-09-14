@@ -1,0 +1,9 @@
+{
+  "desc": "MVP 阶段关闭索引，社区化后按页面开放",
+  "rules": [
+    {
+      "action": "disallow",
+      "page": "*"
+    }
+  ]
+}

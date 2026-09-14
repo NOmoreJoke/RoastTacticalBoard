@@ -1,0 +1,50 @@
+{
+  "root": true,
+  "env": {
+    "es2022": true,
+    "node": true,
+    "jest": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "script"
+  },
+  "extends": "eslint:recommended",
+  "rules": {
+    "eqeqeq": ["error", "smart"],
+    "no-eval": "error",
+    "no-implied-eval": "error",
+    "no-var": "error",
+    "prefer-const": "warn",
+    "no-unused-vars": ["warn", { "args": "none" }]
+  },
+  "overrides": [
+    {
+      "files": ["miniprogram/**/*.js"],
+      "globals": {
+        "wx": "readonly",
+        "App": "readonly",
+        "Page": "readonly",
+        "Component": "readonly",
+        "getApp": "readonly",
+        "getCurrentPages": "readonly"
+      }
+    },
+    {
+      "files": ["miniprogram/utils/**/*.js"],
+      "rules": {
+        "no-restricted-globals": [
+          "error",
+          {
+            "name": "wx",
+            "message": "utils 层必须保持纯净（依赖注入），禁止直接引用 wx 全局。"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["tests/**/*.js"],
+      "env": { "jest": true }
+    }
+  ]
+}

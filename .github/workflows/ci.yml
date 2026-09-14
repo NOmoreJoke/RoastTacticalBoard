@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: ESLint 静态检查
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    name: Jest 单元测试（含覆盖率卡点）
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm test -- --coverage
+      - name: 上传覆盖率报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          retention-days: 14
+
+  package-check:
+    name: 小程序包结构校验
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run check:package
+
+  # 可选：真机预览（手动触发）。需在仓库环境 mp-deploy 配置两个 Secrets：
+  #   MP_APP_ID       小程序 AppID
+  #   MP_PRIVATE_KEY  代码上传密钥的「文件内容」
+  # 私钥内容只写入 CI 临时文件，严禁提交入库。本地预览见 scripts/preview.js。
+  mp-preview:
+    name: miniprogram-ci 真机预览（可选）
+    if: github.event_name == 'workflow_dispatch'
+    needs: [lint, test, package-check]
+    runs-on: ubuntu-latest
+    environment: mp-deploy
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: 生成预览二维码
+        env:
+          MP_APP_ID: ${{ secrets.MP_APP_ID }}
+          MP_PRIVATE_KEY: ${{ secrets.MP_PRIVATE_KEY }}
+        run: |
+          if [ -z "$MP_APP_ID" ] || [ -z "$MP_PRIVATE_KEY" ]; then
+            echo "跳过：未配置 MP_APP_ID / MP_PRIVATE_KEY Secrets"
+            exit 0
+          fi
+          printf '%s' "$MP_PRIVATE_KEY" > /tmp/mp-private-key
+          node scripts/preview.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-qr
+          path: preview-qr.jpg
+          if-no-files-found: ignore

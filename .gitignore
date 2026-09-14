@@ -1,0 +1,28 @@
+# 依赖
+node_modules/
+
+# 测试与构建产物
+coverage/
+dist/
+
+# 日志
+*.log
+npm-debug.log*
+
+# 环境与密钥（miniprogram-ci 上传密钥严禁入库）
+.env
+.env.*
+*.private.key
+private.*.key
+scripts/secrets/
+
+# 微信开发者工具个人配置（含本地路径，因人而异）
+project.private.config.json
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store
+
+# 本地安全扫描目录
+.mimosa/

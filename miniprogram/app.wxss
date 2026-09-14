@@ -1,0 +1,115 @@
+/**
+ * 全局样式 —— 热血动漫搞笑风
+ * 主色 #ff5a36 热血红橙 / #ffc93c 能量黄 / #1a1a2e 深夜蓝 / #21c78a 球场绿
+ */
+page {
+  background: #10102a;
+  color: #f5f0e6;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+/* 漫画描边标题 */
+.comic-title {
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow:
+    2rpx 2rpx 0 #1a1a2e,
+    -2rpx 2rpx 0 #1a1a2e,
+    2rpx -2rpx 0 #1a1a2e,
+    -2rpx -2rpx 0 #1a1a2e,
+    4rpx 6rpx 0 rgba(255, 90, 54, 0.85);
+}
+
+/* 速度线背景 */
+.speed-lines {
+  background-image: repeating-linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.05) 0rpx,
+    rgba(255, 255, 255, 0.05) 2rpx,
+    transparent 2rpx,
+    transparent 22rpx
+  );
+}
+
+/* 卡片 */
+.card {
+  background: #1e1e3f;
+  border: 3rpx solid #2e2e5e;
+  border-radius: 20rpx;
+  box-shadow: 6rpx 6rpx 0 rgba(0, 0, 0, 0.35);
+}
+
+/* 主按钮：热血爆炸风 */
+.btn-hero {
+  background: linear-gradient(135deg, #ff5a36, #ff9f1c);
+  color: #ffffff;
+  font-weight: 800;
+  border-radius: 16rpx;
+  border: 3rpx solid #1a1a2e;
+  box-shadow: 0 6rpx 0 #b83214;
+  text-align: center;
+  padding: 22rpx 0;
+}
+.btn-hero:active {
+  transform: translateY(4rpx);
+  box-shadow: 0 2rpx 0 #b83214;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: #ffc93c;
+  border: 3rpx solid #ffc93c;
+  border-radius: 16rpx;
+  font-weight: 700;
+  text-align: center;
+  padding: 20rpx 0;
+}
+
+.btn-danger {
+  background: #2a1a2e;
+  color: #ff5a36;
+  border: 3rpx solid #ff5a36;
+  border-radius: 16rpx;
+  font-weight: 700;
+}
+
+/* 爆炸徽章 */
+.badge-boom {
+  display: inline-block;
+  background: #ffc93c;
+  color: #1a1a2e;
+  font-weight: 900;
+  transform: rotate(-6deg);
+  border-radius: 10rpx;
+  padding: 4rpx 14rpx;
+  border: 3rpx solid #1a1a2e;
+}
+
+.tag-chip {
+  display: inline-block;
+  background: rgba(255, 201, 60, 0.16);
+  color: #ffc93c;
+  border: 2rpx solid #ffc93c;
+  border-radius: 999rpx;
+  padding: 4rpx 18rpx;
+  margin: 6rpx 8rpx 6rpx 0;
+  font-size: 24rpx;
+}
+.tag-chip.active {
+  background: #ffc93c;
+  color: #1a1a2e;
+  font-weight: 800;
+}
+
+/* 通用布局 */
+.row {
+  display: flex;
+  align-items: center;
+}
+.space {
+  justify-content: space-between;
+}
+.flex1 {
+  flex: 1;
+}

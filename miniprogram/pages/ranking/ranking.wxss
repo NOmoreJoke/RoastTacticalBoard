@@ -1,0 +1,107 @@
+.page {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+.head {
+  padding: 28rpx;
+  margin-bottom: 22rpx;
+}
+.head-title {
+  font-size: 40rpx;
+}
+.head-sub {
+  color: #8f8fb5;
+  font-size: 24rpx;
+  margin-top: 8rpx;
+}
+
+/* 领奖台 */
+.podium {
+  align-items: flex-end;
+  justify-content: center;
+  margin-bottom: 26rpx;
+}
+.podium-item {
+  text-align: center;
+  margin: 0 18rpx;
+}
+.podium-medal {
+  font-size: 44rpx;
+}
+.podium-avatar {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  border: 4rpx solid #f5f0e6;
+  font-size: 54rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10rpx auto;
+}
+.podium-first {
+  width: 140rpx;
+  height: 140rpx;
+  border-color: #ffc93c;
+  box-shadow: 0 0 24rpx rgba(255, 201, 60, 0.55);
+}
+.podium-name {
+  font-weight: 800;
+  font-size: 26rpx;
+}
+.podium-value {
+  color: #ffc93c;
+  font-weight: 800;
+  font-size: 24rpx;
+}
+
+/* 列表 */
+.rank-item {
+  padding: 18rpx 22rpx;
+  margin-bottom: 14rpx;
+}
+.rank-num {
+  width: 52rpx;
+  font-weight: 900;
+  color: #ffc93c;
+  font-size: 30rpx;
+}
+.rank-avatar {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: 18rpx;
+  flex-shrink: 0;
+}
+.rank-name {
+  font-weight: 800;
+  font-size: 28rpx;
+}
+.rank-source {
+  color: #8f8fb5;
+  font-size: 20rpx;
+  font-weight: 500;
+}
+.rank-tags {
+  color: #c2410c;
+  font-size: 22rpx;
+  margin-top: 4rpx;
+}
+.rank-value {
+  color: #ffc93c;
+  font-weight: 900;
+}
+
+.empty {
+  text-align: center;
+  color: #8f8fb5;
+  padding: 80rpx 0;
+}
+.empty-emoji {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}

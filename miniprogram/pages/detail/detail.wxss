@@ -1,0 +1,96 @@
+.page {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+.head {
+  padding: 26rpx 28rpx;
+  margin-bottom: 20rpx;
+}
+.head-title {
+  font-size: 38rpx;
+}
+.head-meta {
+  color: #b8b8d9;
+  font-size: 26rpx;
+  margin-top: 8rpx;
+}
+.value-num {
+  color: #ffc93c;
+  font-weight: 900;
+  font-size: 32rpx;
+}
+
+.board-wrap {
+  justify-content: center;
+}
+.board-area {
+  position: relative;
+  border: 4rpx solid #2e2e5e;
+  border-radius: 14rpx;
+  overflow: hidden;
+  background: #10102a;
+}
+
+.section-title {
+  font-size: 32rpx;
+  margin: 30rpx 0 14rpx;
+}
+
+.roast-item {
+  padding: 20rpx 24rpx;
+  margin-bottom: 16rpx;
+}
+.roast-text {
+  font-size: 28rpx;
+  font-weight: 700;
+}
+.roast-sub {
+  margin-top: 8rpx;
+  font-size: 22rpx;
+}
+.roast-tags {
+  color: #c2410c;
+  font-weight: 700;
+  margin-right: 12rpx;
+}
+.roast-at {
+  color: #2e9bff;
+  font-weight: 700;
+}
+.roast-like {
+  margin-top: 12rpx;
+  display: inline-block;
+  background: rgba(255, 201, 60, 0.14);
+  border: 2rpx solid #ffc93c;
+  color: #ffc93c;
+  border-radius: 999rpx;
+  padding: 6rpx 22rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.empty {
+  text-align: center;
+  color: #8f8fb5;
+  padding: 40rpx 0;
+}
+
+.actions {
+  margin-top: 22rpx;
+}
+.gap {
+  width: 20rpx;
+}
+.share-btn {
+  line-height: 1.4;
+}
+.share-btn::after {
+  border: none;
+}
+.export-canvas {
+  position: fixed;
+  left: -9999rpx;
+  top: -9999rpx;
+  width: 375px;
+  height: 500px;
+}
